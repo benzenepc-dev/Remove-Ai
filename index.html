@@ -8,6 +8,7 @@
     <meta name="description"
         content="Supprimez les traces IA de votre CV et lettre de motivation. Outil CPS — Classe Prépa Scientifique." />
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap"
@@ -674,15 +675,27 @@
 
             <!-- Form -->
             <div class="space-y-4">
+                <!-- Prénom -->
                 <div>
                     <label class="block text-xs font-semibold uppercase tracking-wider mb-2" style="color:#a08fff">👤
                         Ton prénom</label>
-                    <input id="inputNom" type="text" placeholder="Ex : Amadou"
+                    <input id="inputPrenom" type="text" placeholder="Ex : Amadou"
                         class="w-full rounded-xl px-4 py-3 text-sm font-medium outline-none transition-all"
                         style="background:rgba(255,255,255,0.07);border:1px solid rgba(108,63,255,0.3);color:#f3f4f6;caret-color:#a08fff"
                         onfocus="this.style.borderColor='rgba(108,63,255,0.8)';this.style.boxShadow='0 0 0 3px rgba(108,63,255,0.15)'"
                         onblur="this.style.borderColor='rgba(108,63,255,0.3)';this.style.boxShadow='none'" />
                 </div>
+                <!-- Nom -->
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider mb-2" style="color:#a08fff">📝
+                        Ton nom</label>
+                    <input id="inputNom" type="text" placeholder="Ex : Diallo"
+                        class="w-full rounded-xl px-4 py-3 text-sm font-medium outline-none transition-all"
+                        style="background:rgba(255,255,255,0.07);border:1px solid rgba(108,63,255,0.3);color:#f3f4f6;caret-color:#a08fff"
+                        onfocus="this.style.borderColor='rgba(108,63,255,0.8)';this.style.boxShadow='0 0 0 3px rgba(108,63,255,0.15)'"
+                        onblur="this.style.borderColor='rgba(108,63,255,0.3)';this.style.boxShadow='none'" />
+                </div>
+                <!-- Promo -->
                 <div>
                     <label class="block text-xs font-semibold uppercase tracking-wider mb-2" style="color:#a08fff">🏫 Ta
                         promo</label>
@@ -690,7 +703,8 @@
                         class="w-full rounded-xl px-4 py-3 text-sm font-medium outline-none transition-all cursor-pointer"
                         style="background:rgba(255,255,255,0.07);border:1px solid rgba(108,63,255,0.3);color:#f3f4f6"
                         onfocus="this.style.borderColor='rgba(108,63,255,0.8)'"
-                        onblur="this.style.borderColor='rgba(108,63,255,0.3)'">
+                        onblur="this.style.borderColor='rgba(108,63,255,0.3)'"
+                        onchange="document.getElementById('promoAutreWrap').style.display=this.value==='Autre'?'block':'none'">
                         <option value="" style="background:#1a1040">-- Sélectionne ta promo --</option>
                         <option value="CPS 2024" style="background:#1a1040">CPS 2024</option>
                         <option value="CPS 2025" style="background:#1a1040">CPS 2025</option>
@@ -698,6 +712,14 @@
                         <option value="CPS 2027" style="background:#1a1040">CPS 2027</option>
                         <option value="Autre" style="background:#1a1040">Autre</option>
                     </select>
+                    <!-- Free-text for Autre -->
+                    <div id="promoAutreWrap" style="display:none;margin-top:10px">
+                        <input id="inputPromoAutre" type="text" placeholder="Ex : CPS 2028, Prépa Maths…"
+                            class="w-full rounded-xl px-4 py-3 text-sm font-medium outline-none transition-all"
+                            style="background:rgba(255,255,255,0.07);border:1px solid rgba(108,63,255,0.3);color:#f3f4f6;caret-color:#a08fff"
+                            onfocus="this.style.borderColor='rgba(108,63,255,0.8)';this.style.boxShadow='0 0 0 3px rgba(108,63,255,0.15)'"
+                            onblur="this.style.borderColor='rgba(108,63,255,0.3)';this.style.boxShadow='none'" />
+                    </div>
                 </div>
             </div>
 
@@ -709,7 +731,8 @@
             </button>
 
             <!-- Footer note -->
-            <p class="text-center text-xs mt-4" style="color:#4b5563">Tes données restent sur ton appareil uniquement
+            <p class="text-center text-xs mt-4" style="color:#4b5563">Tes informations sont sauvegardées de façon
+                sécurisée 🔒
             </p>
         </div>
     </div>
@@ -1368,18 +1391,24 @@
         });
 
         // ─────────────────────────────────────────────────────────────
+        //  SUPABASE CLIENT  (anon key — safe for frontend)
+        // ─────────────────────────────────────────────────────────────
+        const SUPA_URL = 'https://chztdwfltjxsmdmafans.supabase.co';
+        const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNoenRkd2ZsdGp4c21kbWFmYW5zIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE0MjcyNTAsImV4cCI6MjA4NzAwMzI1MH0.uHCgJKxi_SQh7rR7gPGse4yEyBWGOz13VwyjwrgTHSA';
+        const supabase = window.supabase.createClient(SUPA_URL, SUPA_KEY);
+
+        // ─────────────────────────────────────────────────────────────
         //  WELCOME MODAL & STUDENT PROFILE
         // ─────────────────────────────────────────────────────────────
         (function initStudent() {
+            const prenom = localStorage.getItem('cps_prenom');
             const nom = localStorage.getItem('cps_nom');
             const promo = localStorage.getItem('cps_promo');
 
-            if (!nom) {
-                // First visit — show modal
+            if (!prenom) {
                 showWelcomeModal();
             } else {
-                // Returning student — show greeting banner
-                showGreeting(nom, promo);
+                showGreeting(prenom, nom, promo);
             }
         })();
 
@@ -1387,43 +1416,75 @@
             const overlay = document.getElementById('welcomeOverlay');
             overlay.style.display = 'flex';
             spawnParticles();
-            // Focus first input after animation
-            setTimeout(() => document.getElementById('inputNom').focus(), 700);
+            setTimeout(() => document.getElementById('inputPrenom').focus(), 700);
         }
 
-        function saveStudent() {
-            const nom = document.getElementById('inputNom').value.trim();
-            const promo = document.getElementById('inputPromo').value;
-            if (!nom) {
-                document.getElementById('inputNom').style.borderColor = 'rgba(239,68,68,0.8)';
-                document.getElementById('inputNom').style.boxShadow = '0 0 0 3px rgba(239,68,68,0.15)';
-                document.getElementById('inputNom').placeholder = '⚠️ Entre ton prénom !';
+        async function saveStudent() {
+            const prenomRaw = document.getElementById('inputPrenom').value.trim();
+            const nomRaw = document.getElementById('inputNom').value.trim();
+            const promoSel = document.getElementById('inputPromo').value;
+            const promoAutre = document.getElementById('inputPromoAutre')?.value.trim();
+            const promo = promoSel === 'Autre' ? (promoAutre || 'Autre') : promoSel;
+
+            // Validation
+            if (!prenomRaw) {
+                const el = document.getElementById('inputPrenom');
+                el.style.borderColor = 'rgba(239,68,68,0.8)';
+                el.style.boxShadow = '0 0 0 3px rgba(239,68,68,0.15)';
+                el.placeholder = '⚠️ Entre ton prénom !';
                 return;
             }
-            const nomFormatted = nom.charAt(0).toUpperCase() + nom.slice(1).toLowerCase();
-            localStorage.setItem('cps_nom', nomFormatted);
-            localStorage.setItem('cps_promo', promo || 'CPS');
+            if (!nomRaw) {
+                const el = document.getElementById('inputNom');
+                el.style.borderColor = 'rgba(239,68,68,0.8)';
+                el.style.boxShadow = '0 0 0 3px rgba(239,68,68,0.15)';
+                el.placeholder = '⚠️ Entre ton nom !';
+                return;
+            }
+            if (!promoSel) {
+                const el = document.getElementById('inputPromo');
+                el.style.borderColor = 'rgba(239,68,68,0.8)';
+                return;
+            }
+
+            const prenom = prenomRaw.charAt(0).toUpperCase() + prenomRaw.slice(1).toLowerCase();
+            const nom = nomRaw.charAt(0).toUpperCase() + nomRaw.slice(1).toLowerCase();
+
+            // Save to localStorage immediately (works offline too)
+            localStorage.setItem('cps_prenom', prenom);
+            localStorage.setItem('cps_nom', nom);
+            localStorage.setItem('cps_promo', promo);
+
+            // Save to Supabase (fire-and-forget, don't block UI)
+            supabase.from('students').insert({
+                prenom, nom, promo,
+                created_at: new Date().toISOString(),
+                last_seen_at: new Date().toISOString()
+            }).then(({ error }) => {
+                if (error) console.warn('Supabase insert:', error.message);
+            });
+
             // Animate out
             const card = document.getElementById('welcomeCard');
             card.style.animation = 'welcomeOut 0.4s cubic-bezier(0.4,0,1,1) forwards';
             setTimeout(() => {
                 document.getElementById('welcomeOverlay').style.display = 'none';
-                showGreeting(nomFormatted, promo || 'CPS');
+                showGreeting(prenom, nom, promo);
             }, 400);
         }
 
-        function showGreeting(nom, promo) {
+        function showGreeting(prenom, nom, promo) {
             const hour = new Date().getHours();
             let salut;
             if (hour >= 5 && hour < 12) salut = 'Bonjour';
             else if (hour >= 12 && hour < 18) salut = 'Bon après-midi';
             else salut = 'Bonsoir';
 
+            const fullName = nom ? `${prenom} ${nom}` : prenom;
             const banner = document.getElementById('greetingBanner');
             const text = document.getElementById('greetingText');
-            text.innerHTML = `👋 ${salut} <strong style="color:#a08fff">${nom}</strong>${promo ? ` · <span style="color:#f5a623;font-size:0.75rem">${promo}</span>` : ''} — Bonne session de nettoyage ! 🚀`;
+            text.innerHTML = `👋 ${salut} <strong style="color:#a08fff">${fullName}</strong>${promo ? ` · <span style="color:#f5a623;font-size:0.75rem">${promo}</span>` : ''} — Bonne session de nettoyage ! 🚀`;
             banner.classList.remove('hidden');
-            // Push content down slightly
             document.body.style.paddingTop = banner.offsetHeight + 'px';
             setTimeout(() => document.body.style.paddingTop = '', 4000);
         }
