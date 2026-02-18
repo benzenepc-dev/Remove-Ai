@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="fr" class="dark">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Remove AI — CPS · Nettoyeur de Texte IA</title>
+    <meta name="description"
+        content="Supprimez les traces IA de votre CV et lettre de motivation. Outil CPS — Classe Prépa Scientifique." />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+        rel="stylesheet" />
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Space Grotesk', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0eeff',
+                            100: '#e0dcff',
+                            200: '#c4baff',
+                            300: '#a08fff',
+                            400: '#7c5fff',
+                            500: '#6c3fff',
+                            600: '#5a2ee8',
+                            700: '#4820c4',
+                            800: '#3a189e',
+                            900: '#2d1280',
+                        },
+                        cps: {
+                            gold: '#f5a623',
+                            blue: '#1a3a6b',
+                            light: '#e8f0fe',
+                        }
+                    },
+                    animation: {
+                        'spin-slow': 'spin 2s linear infinite',
+                        'pulse-fast': 'pulse 0.8s cubic-bezier(0.4,0,0.6,1) infinite',
+                        'slide-up': 'slideUp 0.4s ease-out',
+                        'fade-in': 'fadeIn 0.5s ease-out',
+                        'shimmer': 'shimmer 1.5s infinite',
+                        'bar-fill': 'barFill 0.6s cubic-bezier(0.4,0,0.2,1) forwards',
+                    },
+                    keyframes: {
+                        slideUp: {
+                            '0%': { transform: 'translateY(20px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' },
+                        },
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                        shimmer: {
+                            '0%': { backgroundPosition: '-200% 0' },
+                            '100%': { backgroundPosition: '200% 0' },
+                        },
+                        barFill: {
+                            '0%': { width: '0%' },
+                        },
+                    },
+                    backgroundImage: {
+                        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* ── THEME VARIABLES ── */
+        body {
+            --bg: #030712;
+            --surface: rgba(17, 24, 39, 0.6);
+            --surface2: rgba(17, 24, 39, 0.8);
+            --border: rgba(31, 41, 55, 1);
+            --border2: rgba(55, 65, 81, 0.6);
+            --text: #f3f4f6;
+            --text-muted: #9ca3af;
+            --text-dim: #6b7280;
+            --text-dimmer: #4b5563;
+            --panel-bg: rgba(17, 24, 39, 0.6);
+            --header-bg: rgba(3, 7, 18, 0.8);
+            --hero-from: #030712;
+            --hero-via: rgba(45, 18, 128, 0.2);
+            --score-bg: rgba(31, 41, 55, 1);
+            --issues-bg: rgba(17, 24, 39, 0.4);
+            --footer-bg: rgba(3, 7, 18, 0.8);
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body.light {
+            --bg: #f8fafc;
+            --surface: rgba(255, 255, 255, 0.9);
+            --surface2: rgba(248, 250, 252, 0.95);
+            --border: rgba(226, 232, 240, 1);
+            --border2: rgba(203, 213, 225, 0.8);
+            --text: #0f172a;
+            --text-muted: #475569;
+            --text-dim: #94a3b8;
+            --text-dimmer: #cbd5e1;
+            --panel-bg: rgba(255, 255, 255, 0.9);
+            --header-bg: rgba(248, 250, 252, 0.9);
+            --hero-from: #f8fafc;
+            --hero-via: rgba(224, 220, 255, 0.3);
+            --score-bg: rgba(226, 232, 240, 1);
+            --issues-bg: rgba(241, 245, 249, 0.8);
+            --footer-bg: rgba(248, 250, 252, 0.9);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        h1,
+        h2,
+        h3,
+        .font-display {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        /* Preloader */
+        #preloader {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            background: #080c14;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 24px;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+
+        #preloader.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .loader-ring {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            border: 3px solid rgba(108, 63, 255, 0.2);
+            border-top-color: #6c3fff;
+            animation: spin 0.9s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .loader-dots {
+            display: flex;
+            gap: 8px;
+        }
+
+        .loader-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #6c3fff;
+            animation: dotBounce 1.2s ease-in-out infinite;
+        }
+
+        .loader-dot:nth-child(2) {
+            animation-delay: 0.2s;
+            background: #a08fff;
+        }
+
+        .loader-dot:nth-child(3) {
+            animation-delay: 0.4s;
+            background: #f5a623;
+        }
+
+        @keyframes dotBounce {
+
+            0%,
+            80%,
+            100% {
+                transform: scale(0.6);
+                opacity: 0.5;
+            }
+
+            40% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(108, 63, 255, 0.4);
+            border-radius: 3px;
+        }
+
+        /* Score bar animation */
+        .score-bar-fill {
+            transition: width 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Processing overlay */
+        #processingOverlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(8, 12, 20, 0.85);
+            backdrop-filter: blur(4px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            border-radius: 16px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s;
+            z-index: 10;
+        }
+
+        #processingOverlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .processing-ring {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            border: 3px solid rgba(108, 63, 255, 0.2);
+            border-top-color: #6c3fff;
+            animation: spin 0.8s linear infinite;
+        }
+
+        /* Shimmer skeleton */
+        .shimmer-line {
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0.05) 25%, rgba(255, 255, 255, 0.12) 50%, rgba(255, 255, 255, 0.05) 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+            border-radius: 4px;
+        }
+
+        /* Tag animation */
+        .issue-tag {
+            animation: slideUp 0.3s ease-out both;
+        }
+
+        /* Gradient text */
+        .gradient-text {
+            background: linear-gradient(135deg, #a08fff, #6c3fff, #f5a623);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Glow effect */
+        .glow-purple {
+            box-shadow: 0 0 30px rgba(108, 63, 255, 0.25);
+        }
+
+        .glow-gold {
+            box-shadow: 0 0 20px rgba(245, 166, 35, 0.2);
+        }
+
+        /* Textarea focus */
+        textarea:focus {
+            outline: none;
+        }
+
+        /* Toggle switch */
+        .toggle-track {
+            width: 44px;
+            height: 24px;
+            background: rgba(108, 63, 255, 0.3);
+            border-radius: 12px;
+            position: relative;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .toggle-track.on {
+            background: #6c3fff;
+        }
+
+        .toggle-thumb {
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 18px;
+            height: 18px;
+            background: white;
+            border-radius: 50%;
+            transition: transform 0.3s;
+        }
+
+        .toggle-track.on .toggle-thumb {
+            transform: translateX(20px);
+        }
+
+        /* CPS badge */
+        .cps-badge {
+            background: linear-gradient(135deg, #1a3a6b, #2a5298);
+            border: 1px solid rgba(245, 166, 35, 0.4);
+        }
+    </style>
+</head>
+
+<body class="min-h-screen" style="background-color:var(--bg);color:var(--text)">
+
+    <!-- ══════════════════════════════════════════════════════════
+     PRELOADER
+══════════════════════════════════════════════════════════ -->
+    <div id="preloader">
+        <div class="text-center mb-2">
+            <div class="flex items-center justify-center gap-3 mb-4">
+                <div
+                    class="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-500 to-brand-700 flex items-center justify-center text-xl shadow-lg">
+                    🧹</div>
+                <div>
+                    <div class="font-display font-bold text-xl gradient-text">Remove AI</div>
+                    <div class="text-xs text-gray-500">by CPS</div>
+                </div>
+            </div>
+            <div class="loader-ring mx-auto mb-4"></div>
+            <div class="loader-dots justify-center flex">
+                <div class="loader-dot"></div>
+                <div class="loader-dot"></div>
+                <div class="loader-dot"></div>
+            </div>
+        </div>
+        <p class="text-gray-500 text-sm" id="preloaderMsg">Chargement du moteur de nettoyage…</p>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════
+     HEADER
+══════════════════════════════════════════════════════════ -->
+    <header class="sticky top-0 z-50 backdrop-blur-xl"
+        style="background:var(--header-bg);border-bottom:1px solid var(--border)">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between gap-4">
+            <!-- Logo -->
+            <div class="flex items-center gap-3">
+                <div
+                    class="w-9 h-9 rounded-xl bg-gradient-to-br from-brand-500 to-brand-700 flex items-center justify-center text-lg shadow-lg glow-purple flex-shrink-0">
+                    🧹</div>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <h1 class="font-display font-bold text-lg gradient-text leading-none">Remove AI</h1>
+                        <span class="cps-badge text-xs font-semibold px-2 py-0.5 rounded-full text-cps-gold">CPS</span>
+                    </div>
+                    <p class="text-xs leading-none mt-0.5 hidden sm:block" style="color:var(--text-muted)">Nettoyeur de
+                        traces IA · CV & Lettre de motivation</p>
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="flex items-center gap-3">
+                <!-- Timer display -->
+                <div id="timerBadge" class="hidden items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs"
+                    style="background:var(--surface);border:1px solid var(--border);color:var(--text-muted)">
+                    <span class="text-brand-400">⚡</span>
+                    Traitement : <span id="timerVal" class="font-mono font-semibold"
+                        style="color:var(--text)">0ms</span>
+                </div>
+                <!-- Theme toggle -->
+                <div class="flex items-center gap-2 text-xs" style="color:var(--text-muted)">
+                    <span>🌙</span>
+                    <div class="toggle-track on" id="themeToggle" onclick="toggleTheme()">
+                        <div class="toggle-thumb"></div>
+                    </div>
+                    <span>☀️</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- ══════════════════════════════════════════════════════════
+     HERO BANNER
+══════════════════════════════════════════════════════════ -->
+    <div class="relative overflow-hidden"
+        style="background:linear-gradient(135deg,var(--hero-from),var(--hero-via),var(--hero-from));border-bottom:1px solid var(--border)">
+        <!-- Background glow -->
+        <div class="absolute inset-0 overflow-hidden pointer-events-none">
+            <div class="absolute -top-20 -left-20 w-96 h-96 bg-brand-600/10 rounded-full blur-3xl"></div>
+            <div class="absolute -top-10 right-0 w-72 h-72 bg-cps-gold/5 rounded-full blur-3xl"></div>
+        </div>
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <div>
+                    <h2 class="font-display font-bold text-2xl sm:text-3xl mb-1" style="color:var(--text)">
+                        Passez le filtre des recruteurs 🎯
+                    </h2>
+                    <p class="text-sm sm:text-base max-w-xl" style="color:var(--text-muted)">
+                        Collez votre texte IA → l'outil supprime le markdown, les métadonnées et les tics de langage des
+                        LLMs pour rendre votre texte indétectable.
+                    </p>
+                </div>
+                <div class="flex flex-wrap gap-2 flex-shrink-0">
+                    <a href="https://www.zerogpt.com" target="_blank"
+                        class="detector-link flex items-center gap-1.5 rounded-lg px-3 py-2 text-xs transition-all"
+                        style="background:var(--surface);border:1px solid var(--border);color:var(--text-muted)">🔍
+                        ZeroGPT</a>
+                    <a href="https://gptzero.me" target="_blank"
+                        class="detector-link flex items-center gap-1.5 rounded-lg px-3 py-2 text-xs transition-all"
+                        style="background:var(--surface);border:1px solid var(--border);color:var(--text-muted)">🔍
+                        GPTZero</a>
+                    <a href="https://copyleaks.com" target="_blank"
+                        class="detector-link flex items-center gap-1.5 rounded-lg px-3 py-2 text-xs transition-all"
+                        style="background:var(--surface);border:1px solid var(--border);color:var(--text-muted)">🔍
+                        Copyleaks</a>
+                </div>
+            </div>
+
+            <!-- Stats row -->
+            <div class="flex flex-wrap gap-3 mt-5">
+                <div class="flex items-center gap-2 rounded-xl px-4 py-2.5 backdrop-blur-sm"
+                    style="background:var(--surface);border:1px solid var(--border)">
+                    <span class="text-yellow-400 text-lg">📝</span>
+                    <div>
+                        <div class="text-xs" style="color:var(--text-muted)">Markdown supprimé</div>
+                        <div class="font-display font-bold text-lg leading-none" style="color:var(--text)" id="statMd">0
+                        </div>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2 rounded-xl px-4 py-2.5 backdrop-blur-sm"
+                    style="background:var(--surface);border:1px solid var(--border)">
+                    <span class="text-pink-400 text-lg">🤖</span>
+                    <div>
+                        <div class="text-xs" style="color:var(--text-muted)">Phrases IA retirées</div>
+                        <div class="font-display font-bold text-lg leading-none" style="color:var(--text)" id="statAi">0
+                        </div>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2 rounded-xl px-4 py-2.5 backdrop-blur-sm"
+                    style="background:var(--surface);border:1px solid var(--border)">
+                    <span class="text-brand-400 text-lg">✂️</span>
+                    <div>
+                        <div class="text-xs" style="color:var(--text-muted)">Caractères nettoyés</div>
+                        <div class="font-display font-bold text-lg leading-none" style="color:var(--text)"
+                            id="statChars">0</div>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2 rounded-xl px-4 py-2.5 backdrop-blur-sm"
+                    style="background:var(--surface);border:1px solid var(--border)">
+                    <span class="text-green-400 text-lg">📊</span>
+                    <div>
+                        <div class="text-xs" style="color:var(--text-muted)">Mots dans le résultat</div>
+                        <div class="font-display font-bold text-lg leading-none" style="color:var(--text)"
+                            id="statWords">0</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════
+     SCORE METERS
+══════════════════════════════════════════════════════════ -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <!-- Before -->
+            <div class="rounded-2xl p-4 backdrop-blur-sm"
+                style="background:var(--panel-bg);border:1px solid var(--border)">
+                <div class="flex items-center justify-between mb-3">
+                    <div class="flex items-center gap-2">
+                        <div class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></div>
+                        <span class="text-xs font-semibold uppercase tracking-wider"
+                            style="color:var(--text-muted)">Score IA — Original</span>
+                    </div>
+                    <span class="font-display font-bold text-xl" style="color:var(--text)" id="scoreBeforeVal">—</span>
+                </div>
+                <div class="h-2.5 rounded-full overflow-hidden" style="background:var(--score-bg)">
+                    <div id="scoreBefore"
+                        class="score-bar-fill h-full rounded-full bg-gradient-to-r from-yellow-500 to-red-500"
+                        style="width:0%"></div>
+                </div>
+                <div class="flex justify-between mt-1.5 text-xs" style="color:var(--text-dimmer)">
+                    <span>Humain 👤</span><span>IA 🤖</span>
+                </div>
+            </div>
+            <!-- After -->
+            <div class="rounded-2xl p-4 backdrop-blur-sm"
+                style="background:var(--panel-bg);border:1px solid var(--border)">
+                <div class="flex items-center justify-between mb-3">
+                    <div class="flex items-center gap-2">
+                        <div class="w-2 h-2 rounded-full bg-green-500"></div>
+                        <span class="text-xs font-semibold uppercase tracking-wider"
+                            style="color:var(--text-muted)">Score IA — Nettoyé</span>
+                    </div>
+                    <span class="font-display font-bold text-xl" style="color:var(--text)" id="scoreAfterVal">—</span>
+                </div>
+                <div class="h-2.5 rounded-full overflow-hidden" style="background:var(--score-bg)">
+                    <div id="scoreAfter"
+                        class="score-bar-fill h-full rounded-full bg-gradient-to-r from-green-500 to-emerald-400"
+                        style="width:0%"></div>
+                </div>
+                <div class="flex justify-between mt-1.5 text-xs" style="color:var(--text-dimmer)">
+                    <span>Humain 👤</span><span>IA 🤖</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════
+     MAIN PANELS
+══════════════════════════════════════════════════════════ -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 pb-6">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+
+            <!-- ── INPUT PANEL ── -->
+            <div class="flex flex-col rounded-2xl overflow-hidden backdrop-blur-sm"
+                style="min-height:480px;background:var(--panel-bg);border:1px solid var(--border)">
+                <div class="flex items-center justify-between px-4 py-3"
+                    style="border-bottom:1px solid var(--border);background:var(--surface2)">
+                    <div class="flex items-center gap-2">
+                        <span class="text-base">📋</span>
+                        <span class="text-xs font-semibold uppercase tracking-wider"
+                            style="color:var(--text-muted)">Texte original</span>
+                        <span class="text-xs" style="color:var(--text-dim)" id="inputCharCount">0 car.</span>
+                    </div>
+                    <button onclick="clearInput()"
+                        class="flex items-center gap-1.5 text-xs text-red-400 hover:text-red-300 bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 rounded-lg px-3 py-1.5 transition-all">
+                        🗑 Effacer
+                    </button>
+                </div>
+                <textarea id="inputText"
+                    class="flex-1 w-full bg-transparent text-sm leading-relaxed p-5 resize-none focus:ring-0 border-0"
+                    style="color:var(--text);"
+                    placeholder="Collez ici votre texte généré par une IA (ChatGPT, Claude, Gemini…)&#10;&#10;Le nettoyage se fait automatiquement en temps réel.&#10;&#10;Exemples de ce qui sera supprimé :&#10;• **Texte en gras** → Texte en gras&#10;• Certainly! Of course! → (supprimé)&#10;• In conclusion, → (supprimé)&#10;• # Titre → Titre&#10;• — tirets longs → -"
+                    oninput="onInput()" onpaste="setTimeout(onInput, 10)"></textarea>
+            </div>
+
+            <!-- ── OUTPUT PANEL ── -->
+            <div class="flex flex-col rounded-2xl overflow-hidden backdrop-blur-sm relative"
+                style="min-height:480px;background:var(--panel-bg);border:1px solid var(--border)">
+                <!-- Processing overlay -->
+                <div id="processingOverlay">
+                    <div class="processing-ring"></div>
+                    <p class="text-sm" style="color:var(--text-muted)">Nettoyage en cours…</p>
+                    <div class="flex gap-2">
+                        <div class="shimmer-line w-24 h-2"></div>
+                        <div class="shimmer-line w-16 h-2"></div>
+                        <div class="shimmer-line w-20 h-2"></div>
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-between px-4 py-3"
+                    style="border-bottom:1px solid var(--border);background:var(--surface2)">
+                    <div class="flex items-center gap-2">
+                        <span class="text-base">✨</span>
+                        <span class="text-xs font-semibold uppercase tracking-wider"
+                            style="color:var(--text-muted)">Texte nettoyé</span>
+                        <span class="text-xs" style="color:var(--text-dim)" id="outputCharCount">0 car.</span>
+                    </div>
+                    <div class="flex gap-2">
+                        <button onclick="copyOutput()"
+                            class="flex items-center gap-1.5 text-xs text-brand-300 hover:text-white bg-brand-500/10 hover:bg-brand-500/20 border border-brand-500/30 rounded-lg px-3 py-1.5 transition-all">
+                            📋 Copier
+                        </button>
+                        <button onclick="copyOutput()"
+                            class="flex items-center gap-1.5 text-xs font-semibold text-white bg-gradient-to-r from-brand-600 to-brand-500 hover:from-brand-500 hover:to-brand-400 rounded-lg px-3 py-1.5 transition-all shadow-lg shadow-brand-900/50">
+                            ✅ Tout copier
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Output content -->
+                <div id="outputText"
+                    class="flex-1 p-5 text-sm leading-relaxed overflow-y-auto whitespace-pre-wrap break-words"
+                    style="color:var(--text)">
+                    <!-- Empty state -->
+                    <div id="emptyState" class="h-full flex flex-col items-center justify-center gap-3 text-center">
+                        <div class="text-5xl opacity-20">🧹</div>
+                        <p class="text-sm" style="color:var(--text-dim)">Le texte nettoyé apparaîtra ici…</p>
+                        <p class="text-xs" style="color:var(--text-dimmer)">Collez votre texte dans le panneau de gauche
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════
+     DETECTED ISSUES
+══════════════════════════════════════════════════════════ -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 pb-8">
+        <div class="rounded-2xl p-4" style="background:var(--issues-bg);border:1px solid var(--border)">
+            <div class="flex items-center gap-2 mb-3">
+                <span class="text-sm">🔍</span>
+                <h3 class="text-xs font-semibold uppercase tracking-wider" style="color:var(--text-muted)">Éléments
+                    détectés et supprimés</h3>
+            </div>
+            <div class="flex flex-wrap gap-2" id="issuesGrid">
+                <div class="text-xs italic" style="color:var(--text-dim)">Collez un texte pour voir l'analyse détaillée…
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════
+     FOOTER
+══════════════════════════════════════════════════════════ -->
+    <footer style="border-top:1px solid var(--border);background:var(--footer-bg)">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-5 flex flex-col sm:flex-row items-center justify-between gap-3">
+            <div class="flex items-center gap-3">
+                <div class="cps-badge rounded-lg px-3 py-1.5 flex items-center gap-2">
+                    <span class="text-cps-gold font-display font-bold text-sm">CPS</span>
+                    <span class="text-xs" style="color:var(--text-muted)">Classe Prépa Scientifique</span>
+                </div>
+                <span class="text-xs" style="color:var(--text-dimmer)">· Outil 100% local, aucune donnée envoyée</span>
+            </div>
+            <div class="flex items-center gap-3 text-xs" style="color:var(--text-dim)">
+                <span>Testez sur :</span>
+                <a href="https://www.zerogpt.com" target="_blank"
+                    class="text-brand-400 hover:text-brand-300 transition-colors">ZeroGPT</a>
+                <a href="https://gptzero.me" target="_blank"
+                    class="text-brand-400 hover:text-brand-300 transition-colors">GPTZero</a>
+                <a href="https://copyleaks.com" target="_blank"
+                    class="text-brand-400 hover:text-brand-300 transition-colors">Copyleaks</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ══════════════════════════════════════════════════════════
+     TOAST
+══════════════════════════════════════════════════════════ -->
+    <div id="toast"
+        class="fixed bottom-6 right-6 z-50 flex items-center gap-2 bg-green-500 text-gray-950 font-semibold text-sm px-4 py-3 rounded-xl shadow-2xl shadow-green-900/50 translate-y-20 opacity-0 transition-all duration-300">
+        ✅ Copié dans le presse-papier !
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════
+     JAVASCRIPT ENGINE
+══════════════════════════════════════════════════════════ -->
+    <script>
+        // ─────────────────────────────────────────────────────────────
+        //  PRELOADER
+        // ─────────────────────────────────────────────────────────────
+        const preloaderMessages = [
+            'Chargement du moteur de nettoyage…',
+            'Compilation des règles markdown…',
+            'Indexation des phrases IA…',
+            'Calibration du score heuristique…',
+            'Prêt !'
+        ];
+        let msgIdx = 0;
+        const msgEl = document.getElementById('preloaderMsg');
+        const msgInterval = setInterval(() => {
+            msgIdx++;
+            if (msgIdx < preloaderMessages.length) {
+                msgEl.textContent = preloaderMessages[msgIdx];
+            } else {
+                clearInterval(msgInterval);
+            }
+        }, 300);
+
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('preloader').classList.add('hidden');
+            }, 1600);
+        });
+
+        // ─────────────────────────────────────────────────────────────
+        //  MARKDOWN RULES
+        // ─────────────────────────────────────────────────────────────
+        const markdownRules = [
+            { name: 'Bloc de code (```)', re: /```[\s\S]*?```/g, replace: '' },
+            { name: 'Code inline (`)', re: /`([^`]+)`/g, replace: '$1' },
+            { name: 'Titres Markdown (#)', re: /^#{1,6}\s+(.+)$/gm, replace: '$1' },
+            { name: 'Gras+Italique (***)', re: /\*{3}(.+?)\*{3}/g, replace: '$1' },
+            { name: 'Gras (**)', re: /\*{2}(.+?)\*{2}/g, replace: '$1' },
+            { name: 'Gras (__)', re: /__(.+?)__/g, replace: '$1' },
+            { name: 'Italique (*)', re: /\*(.+?)\*/g, replace: '$1' },
+            { name: 'Italique (_)', re: /_(.+?)_/g, replace: '$1' },
+            { name: 'Barré (~~)', re: /~~(.+?)~~/g, replace: '$1' },
+            { name: 'Citation (>)', re: /^>\s?/gm, replace: '' },
+            { name: 'Séparateur (---)', re: /^[-*_]{3,}\s*$/gm, replace: '' },
+            { name: 'Liste à puces', re: /^[\s]*[-*+]\s+/gm, replace: '' },
+            { name: 'Liste numérotée', re: /^[\s]*\d+\.\s+/gm, replace: '' },
+            { name: 'Liens Markdown []()', re: /\[([^\]]+)\]\([^)]+\)/g, replace: '$1' },
+            { name: 'Images Markdown ![]()', re: /!\[[^\]]*\]\([^)]+\)/g, replace: '' },
+            { name: 'Séparateur tableau', re: /^\|[-| :]+\|$/gm, replace: '' },
+            { name: 'Tableaux Markdown (|)', re: /^\|.+\|$/gm, replace: (m) => m.replace(/\|/g, ' ').trim() },
+            { name: 'Balises HTML', re: /<\/?[a-zA-Z][^>]*>/g, replace: '' },
+        ];
+
+        // ─────────────────────────────────────────────────────────────
+        //  AI PHRASE RULES
+        // ─────────────────────────────────────────────────────────────
+        const aiPhraseRules = [
+            // Affirmations
+            { name: 'Certainly!', re: /\bCertainly[!,]?\s*/gi, replace: '' },
+            { name: 'Of course!', re: /\bOf course[!,]?\s*/gi, replace: '' },
+            { name: 'Absolutely!', re: /\bAbsolutely[!,]?\s*/gi, replace: '' },
+            { name: 'Sure!', re: /\bSure[!,]?\s*/gi, replace: '' },
+            { name: 'Great!', re: /\bGreat[!,]?\s*/gi, replace: '' },
+            { name: 'Bien sûr !', re: /\bBien sûr\s*[!,]?\s*/gi, replace: '' },
+            { name: 'Bien entendu', re: /\bBien entendu\s*[!,]?\s*/gi, replace: '' },
+            { name: "D'accord !", re: /\bD['']accord\s*[!,]?\s*/gi, replace: '' },
+            { name: 'Parfait !', re: /\bParfait\s*[!,]?\s*/gi, replace: '' },
+            { name: 'Absolument !', re: /\bAbsolument\s*[!,]?\s*/gi, replace: '' },
+            { name: "Je serais ravi(e) de", re: /\bJe\s+serais\s+ravi[e]?\s+de\b/gi, replace: 'Je vais' },
+            { name: "I'd be happy to", re: /\bI['']d\s+be\s+happy\s+to\b/gi, replace: 'I will' },
+            { name: "I'd be glad to", re: /\bI['']d\s+be\s+glad\s+to\b/gi, replace: 'I will' },
+            { name: "I'd be delighted to", re: /\bI['']d\s+be\s+delighted\s+to\b/gi, replace: 'I will' },
+            // Meta-commentary
+            { name: 'As an AI', re: /\bAs an AI[^,.]*(,|\.|\s)/gi, replace: '' },
+            { name: "En tant qu'IA", re: /\bEn tant qu['']IA[^,.]*[,.]\s*/gi, replace: '' },
+            { name: 'As a language model', re: /\bAs a language model[^,.]*(,|\.|\s)/gi, replace: '' },
+            { name: "It's worth noting", re: /\bIt['']s worth noting that\b/gi, replace: '' },
+            { name: 'Il est important de noter', re: /\bIl est important de noter que\b/gi, replace: '' },
+            { name: 'It is important to note', re: /\bIt is important to note that\b/gi, replace: '' },
+            { name: 'It is worth mentioning', re: /\bIt is worth mentioning that\b/gi, replace: '' },
+            { name: 'Please note that', re: /\bPlease note that\b/gi, replace: '' },
+            { name: 'It should be noted', re: /\bIt should be noted that\b/gi, replace: '' },
+            { name: 'Notez que', re: /\bNotez que\b/gi, replace: '' },
+            { name: 'Il convient de noter', re: /\bIl convient de noter que\b/gi, replace: '' },
+            { name: 'Il est à noter', re: /\bIl est à noter que\b/gi, replace: '' },
+            // Transitions
+            { name: 'In conclusion,', re: /\bIn conclusion[,.]?\s*/gi, replace: '' },
+            { name: 'En conclusion,', re: /\bEn conclusion[,.]?\s*/gi, replace: '' },
+            { name: 'In summary,', re: /\bIn summary[,.]?\s*/gi, replace: '' },
+            { name: 'En résumé,', re: /\bEn résumé[,.]?\s*/gi, replace: '' },
+            { name: 'To summarize,', re: /\bTo summarize[,.]?\s*/gi, replace: '' },
+            { name: 'In short,', re: /\bIn short[,.]?\s*/gi, replace: '' },
+            { name: 'To sum up,', re: /\bTo sum up[,.]?\s*/gi, replace: '' },
+            { name: 'Overall,', re: /\bOverall[,.]?\s*/gi, replace: '' },
+            { name: 'Furthermore,', re: /\bFurthermore[,.]?\s*/gi, replace: '' },
+            { name: 'Moreover,', re: /\bMoreover[,.]?\s*/gi, replace: '' },
+            { name: 'Additionally,', re: /\bAdditionally[,.]?\s*/gi, replace: '' },
+            { name: 'In addition,', re: /\bIn addition[,.]?\s*/gi, replace: '' },
+            { name: 'Nevertheless,', re: /\bNevertheless[,.]?\s*/gi, replace: '' },
+            { name: 'Nonetheless,', re: /\bNonetheless[,.]?\s*/gi, replace: '' },
+            { name: 'Consequently,', re: /\bConsequently[,.]?\s*/gi, replace: '' },
+            { name: 'Therefore,', re: /\bTherefore[,.]?\s*/gi, replace: '' },
+            { name: 'Thus,', re: /\bThus[,.]?\s*/gi, replace: '' },
+            { name: 'Hence,', re: /\bHence[,.]?\s*/gi, replace: '' },
+            { name: 'Accordingly,', re: /\bAccordingly[,.]?\s*/gi, replace: '' },
+            { name: 'As a result,', re: /\bAs a result[,.]?\s*/gi, replace: '' },
+            { name: 'Par conséquent,', re: /\bPar conséquent[,.]?\s*/gi, replace: '' },
+            { name: 'De plus,', re: /\bDe plus[,.]?\s*/gi, replace: '' },
+            { name: 'En outre,', re: /\bEn outre[,.]?\s*/gi, replace: '' },
+            { name: 'Cependant,', re: /\bCependant[,.]?\s*/gi, replace: '' },
+            { name: 'Néanmoins,', re: /\bNéanmoins[,.]?\s*/gi, replace: '' },
+            { name: 'Toutefois,', re: /\bToutefois[,.]?\s*/gi, replace: '' },
+            { name: 'Ainsi,', re: /\bAinsi[,.]?\s*/gi, replace: '' },
+            { name: 'Dès lors,', re: /\bDès lors[,.]?\s*/gi, replace: '' },
+            // Clichés IA
+            { name: "In today's world", re: /\bIn today['']s (world|society|landscape)[,.]?\s*/gi, replace: '' },
+            { name: 'Dans le monde actuel', re: /\bDans le monde actuel[,.]?\s*/gi, replace: '' },
+            { name: 'In the ever-evolving', re: /\bIn the ever-evolving\b/gi, replace: 'In the' },
+            { name: 'As previously mentioned', re: /\bAs (previously|earlier) mentioned[,.]?\s*/gi, replace: '' },
+            { name: 'Comme mentionné précédemment', re: /\bComme mentionné précédemment[,.]?\s*/gi, replace: '' },
+            { name: 'It goes without saying', re: /\bIt goes without saying that\b/gi, replace: '' },
+            { name: 'Needless to say', re: /\bNeedless to say[,.]?\s*/gi, replace: '' },
+            { name: 'Last but not least', re: /\bLast but not least[,.]?\s*/gi, replace: '' },
+            { name: 'First and foremost', re: /\bFirst and foremost[,.]?\s*/gi, replace: '' },
+            { name: 'Without further ado', re: /\bWithout further ado[,.]?\s*/gi, replace: '' },
+            { name: 'I hope this helps', re: /\bI hope this (helps|clarifies|answers)[^.]*\./gi, replace: '' },
+            { name: 'Feel free to', re: /\bFeel free to\b/gi, replace: 'You can' },
+            { name: "Don't hesitate to", re: /\bDon['']t hesitate to\b/gi, replace: 'Please' },
+            { name: "N'hésitez pas à", re: /\bN['']hésitez pas à\b/gi, replace: 'Vous pouvez' },
+            { name: 'Je me tiens à votre disposition', re: /\bJe me tiens à votre disposition\b/gi, replace: 'Je suis disponible' },
+        ];
+
+        // ─────────────────────────────────────────────────────────────
+        //  CHARACTER RULES
+        // ─────────────────────────────────────────────────────────────
+        const charRules = [
+            { name: 'Espaces invisibles', re: /[\u200B\u200C\u200D\uFEFF\u00AD]/g, replace: '' },
+            { name: 'Guillemets typographiques', re: /[\u201C\u201D]/g, replace: '"' },
+            { name: 'Apostrophes typographiques', re: /[\u2018\u2019]/g, replace: "'" },
+            { name: 'Tiret long (—)', re: /\u2014/g, replace: ' - ' },
+            { name: 'Tiret moyen (–)', re: /\u2013/g, replace: '-' },
+            { name: 'Points de suspension (…)', re: /\u2026/g, replace: '...' },
+            { name: 'Ponctuation répétée', re: /([!?]){2,}/g, replace: '$1' },
+            { name: 'Espace insécable', re: /\u00A0/g, replace: ' ' },
+            { name: 'Espaces multiples', re: /[ \t]{2,}/g, replace: ' ' },
+            { name: 'Lignes vides excessives', re: /\n{3,}/g, replace: '\n\n' },
+            { name: 'Espaces en fin de ligne', re: /[ \t]+$/gm, replace: '' },
+        ];
+
+        // ─────────────────────────────────────────────────────────────
+        //  AI SCORE HEURISTIC
+        // ─────────────────────────────────────────────────────────────
+        function computeAIScore(text) {
+            if (!text.trim()) return 0;
+            let score = 0;
+            const textLower = text.toLowerCase();
+            const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 10);
+
+            // Markdown presence
+            score += Math.min((text.match(/[#*_`>|~]/g) || []).length * 2, 25);
+
+            // AI phrase count
+            let aiCount = 0;
+            for (const r of aiPhraseRules) { const m = text.match(r.re); if (m) aiCount += m.length; }
+            score += Math.min(aiCount * 5, 30);
+
+            // Sentence uniformity
+            if (sentences.length > 2) {
+                const lengths = sentences.map(s => s.trim().split(/\s+/).length);
+                const avg = lengths.reduce((a, b) => a + b, 0) / lengths.length;
+                const stdDev = Math.sqrt(lengths.reduce((a, b) => a + Math.pow(b - avg, 2), 0) / lengths.length);
+                score += stdDev < 4 ? 15 : stdDev < 8 ? 8 : 0;
+            }
+
+            // Transition words
+            const transitions = ['furthermore', 'moreover', 'additionally', 'consequently', 'therefore',
+                'nevertheless', 'nonetheless', 'accordingly', 'de plus', 'en outre', 'cependant',
+                'néanmoins', 'toutefois', 'ainsi', 'par conséquent'];
+            let tc = 0;
+            for (const tw of transitions) tc += textLower.split(tw).length - 1;
+            score += Math.min(tc * 4, 20);
+
+            // Adverb density
+            const adverbs = ['particularly', 'especially', 'significantly', 'effectively', 'efficiently',
+                'remarkably', 'notably', 'importantly', 'crucially', 'essentially', 'fundamentally',
+                'particulièrement', 'notamment', 'significativement', 'efficacement', 'remarquablement'];
+            let ac = 0;
+            for (const adv of adverbs) ac += textLower.split(adv).length - 1;
+            score += Math.min(ac * 3, 15);
+
+            // Typography chars
+            score += Math.min((text.match(/[\u2014\u2013\u2026\u201C\u201D\u2018\u2019]/g) || []).length * 2, 10);
+
+            return Math.min(Math.round(score), 100);
+        }
+
+        // ─────────────────────────────────────────────────────────────
+        //  CLEAN ENGINE
+        // ─────────────────────────────────────────────────────────────
+        function cleanText(raw) {
+            let text = raw;
+            const issues = [];
+            let mdCount = 0, aiCount = 0, charCount = 0;
+
+            for (const rule of markdownRules) {
+                const before = text;
+                text = text.replace(rule.re, rule.replace);
+                if (before.length !== text.length) { mdCount++; issues.push({ name: rule.name, type: 'md', count: before.length - text.length }); }
+            }
+            for (const rule of aiPhraseRules) {
+                const matches = text.match(rule.re);
+                if (matches?.length) {
+                    aiCount += matches.length;
+                    issues.push({ name: rule.name, type: 'ai', count: matches.length });
+                    text = text.replace(rule.re, rule.replace);
+                }
+            }
+            for (const rule of charRules) {
+                const before = text;
+                text = text.replace(rule.re, rule.replace);
+                if (before.length !== text.length) { charCount++; issues.push({ name: rule.name, type: 'char', count: before.length - text.length }); }
+            }
+
+            // Fix capitalization after removal
+            text = text.replace(/([.!?]\s+)([a-zàâéèêëîïôùûüç])/g, (m, p1, p2) => p1 + p2.toUpperCase());
+            text = text.trim();
+
+            return { cleaned: text, issues, mdCount, aiCount, charCount };
+        }
+
+        // ─────────────────────────────────────────────────────────────
+        //  UI STATE
+        // ─────────────────────────────────────────────────────────────
+        let lastRaw = '';
+        let lastCleaned = '';
+        let debounceTimer = null;
+
+        function onInput() {
+            const raw = document.getElementById('inputText').value;
+            document.getElementById('inputCharCount').textContent = raw.length.toLocaleString('fr-FR') + ' car.';
+
+            if (raw === lastRaw) return;
+            lastRaw = raw;
+
+            if (!raw.trim()) { resetUI(); return; }
+
+            // Show processing overlay with debounce
+            clearTimeout(debounceTimer);
+            document.getElementById('processingOverlay').classList.add('active');
+
+            debounceTimer = setTimeout(() => {
+                const t0 = performance.now();
+                const scoreBefore = computeAIScore(raw);
+                const { cleaned, issues, mdCount, aiCount, charCount } = cleanText(raw);
+                const scoreAfter = computeAIScore(cleaned);
+                const elapsed = Math.round(performance.now() - t0);
+                lastCleaned = cleaned;
+
+                // Hide overlay
+                document.getElementById('processingOverlay').classList.remove('active');
+
+                // Output
+                const outputEl = document.getElementById('outputText');
+                document.getElementById('emptyState')?.remove();
+                outputEl.textContent = cleaned;
+                document.getElementById('outputCharCount').textContent = cleaned.length.toLocaleString('fr-FR') + ' car.';
+
+                // Stats
+                document.getElementById('statMd').textContent = mdCount;
+                document.getElementById('statAi').textContent = aiCount;
+                document.getElementById('statChars').textContent = (raw.length - cleaned.length).toLocaleString('fr-FR');
+                document.getElementById('statWords').textContent = cleaned.split(/\s+/).filter(Boolean).length.toLocaleString('fr-FR');
+
+                // Score bars
+                document.getElementById('scoreBefore').style.width = scoreBefore + '%';
+                document.getElementById('scoreBeforeVal').textContent = scoreBefore + '%';
+                document.getElementById('scoreAfter').style.width = scoreAfter + '%';
+                document.getElementById('scoreAfterVal').textContent = scoreAfter + '%';
+
+                // Timer badge
+                const timerBadge = document.getElementById('timerBadge');
+                timerBadge.classList.remove('hidden');
+                timerBadge.classList.add('flex');
+                document.getElementById('timerVal').textContent = elapsed < 1000 ? elapsed + 'ms' : (elapsed / 1000).toFixed(2) + 's';
+
+                // Issues
+                const grid = document.getElementById('issuesGrid');
+                if (issues.length === 0) {
+                    grid.innerHTML = '<div class="text-xs text-green-400 font-medium">✅ Aucun problème détecté — texte déjà propre !</div>';
+                } else {
+                    const typeColors = {
+                        md: 'bg-yellow-500/10 border-yellow-500/30 text-yellow-400',
+                        ai: 'bg-pink-500/10 border-pink-500/30 text-pink-400',
+                        char: 'bg-brand-500/10 border-brand-500/30 text-brand-400',
+                    };
+                    grid.innerHTML = issues.map((issue, i) => `
+        <div class="issue-tag flex items-center gap-1.5 border rounded-lg px-2.5 py-1 text-xs ${typeColors[issue.type]}"
+             style="animation-delay:${i * 30}ms">
+          <span class="font-bold bg-current text-gray-950 rounded px-1.5 py-0.5 text-xs leading-none">${issue.count}</span>
+          ${issue.name}
+        </div>
+      `).join('');
+                }
+            }, 180); // 180ms debounce = feels instant but avoids thrashing
+        }
+
+        function resetUI() {
+            document.getElementById('processingOverlay').classList.remove('active');
+            const outputEl = document.getElementById('outputText');
+            outputEl.innerHTML = `
+    <div id="emptyState" class="h-full flex flex-col items-center justify-center gap-3 text-center">
+      <div class="text-5xl opacity-20">🧹</div>
+      <p class="text-sm" style="color:var(--text-dim)">Le texte nettoyé apparaîtra ici…</p>
+      <p class="text-xs" style="color:var(--text-dimmer)">Collez votre texte dans le panneau de gauche</p>
+    </div>`;
+            ['statMd', 'statAi', 'statChars', 'statWords'].forEach(id => document.getElementById(id).textContent = '0');
+            document.getElementById('scoreBefore').style.width = '0%';
+            document.getElementById('scoreBeforeVal').textContent = '—';
+            document.getElementById('scoreAfter').style.width = '0%';
+            document.getElementById('scoreAfterVal').textContent = '—';
+            document.getElementById('outputCharCount').textContent = '0 car.';
+            document.getElementById('timerBadge').classList.add('hidden');
+            document.getElementById('timerBadge').classList.remove('flex');
+            document.getElementById('issuesGrid').innerHTML = '<div class="text-xs italic" style="color:var(--text-dim)">Collez un texte pour voir l\'analyse détaillée…</div>';
+            lastRaw = ''; lastCleaned = '';
+        }
+
+        function clearInput() {
+            document.getElementById('inputText').value = '';
+            document.getElementById('inputCharCount').textContent = '0 car.';
+            resetUI();
+        }
+
+        async function copyOutput() {
+            if (!lastCleaned) return;
+            try {
+                await navigator.clipboard.writeText(lastCleaned);
+            } catch {
+                const ta = document.createElement('textarea');
+                ta.value = lastCleaned;
+                document.body.appendChild(ta);
+                ta.select();
+                document.execCommand('copy');
+                document.body.removeChild(ta);
+            }
+            const toast = document.getElementById('toast');
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+                toast.classList.remove('translate-y-0', 'opacity-100');
+            }, 2500);
+        }
+
+        // ─────────────────────────────────────────────────────────────
+        //  THEME TOGGLE
+        // ─────────────────────────────────────────────────────────────
+        let isDark = true;
+        function toggleTheme() {
+            isDark = !isDark;
+            document.body.classList.toggle('light', !isDark);
+            document.getElementById('themeToggle').classList.toggle('on', isDark);
+        }
+
+        // ─────────────────────────────────────────────────────────────
+        //  KEYBOARD SHORTCUT  Ctrl+Enter = copy
+        // ─────────────────────────────────────────────────────────────
+        document.addEventListener('keydown', e => {
+            if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') copyOutput();
+        });
+    </script>
+</body>
+
+</html>
