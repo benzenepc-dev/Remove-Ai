@@ -1128,20 +1128,22 @@
         const ZW_CHARS = ['\u200B', '\u200C', '\u200D']; // ZWSP, ZWNJ, ZWJ
 
         function injectZeroWidth(text) {
-            // Insert 1 zero-width char every ~3-8 word characters, randomly
+            // NUCLEAR OPTION: Insert 1 zero-width char every 2-4 characters
+            // This destroys tokenization for detectors
             let result = '';
             let charCount = 0;
-            let nextInject = 3 + Math.floor(Math.random() * 5);
+            let nextInject = 2 + Math.floor(Math.random() * 3);
+
             for (let i = 0; i < text.length; i++) {
                 const ch = text[i];
                 result += ch;
-                // Only inject between word characters (not spaces or punctuation)
-                if (/\w/.test(ch)) {
+                // Inject ANYWHERE, even inside words
+                if (/\S/.test(ch)) { // Any non-whitespace
                     charCount++;
                     if (charCount >= nextInject) {
                         result += ZW_CHARS[Math.floor(Math.random() * ZW_CHARS.length)];
                         charCount = 0;
-                        nextInject = 8 + Math.floor(Math.random() * 8);
+                        nextInject = 2 + Math.floor(Math.random() * 3);
                     }
                 }
             }
@@ -1176,9 +1178,9 @@
         const homoglyphKeys = Object.keys(homoglyphMap);
 
         function applyHomoglyphs(text) {
-            // Apply to ~30% of eligible characters
+            // Apply to 40% of eligible characters (High aggression)
             return text.split('').map(ch => {
-                if (homoglyphKeys.includes(ch) && Math.random() < 0.30) {
+                if (homoglyphKeys.includes(ch) && Math.random() < 0.40) {
                     return homoglyphMap[ch];
                 }
                 return ch;
@@ -1232,6 +1234,14 @@
 
             // Pass E: Burstiness variation
             text = varyBurstiness(text);
+
+            // Pass E1.5: Strip AI Connectors (New Nuclear Pass)
+            const connectors = [
+                /En outre,/gi, /De plus,/gi, /Par ailleurs,/gi, /Cependant,/gi,
+                /En conclusion,/gi, /En somme,/gi, /Il est important de noter que/gi,
+                /D'autre part,/gi, /Néanmoins,/gi, /Toutefois,/gi, /Au final,/gi
+            ];
+            connectors.forEach(re => text = text.replace(re, ''));
 
             // Pass E2: Conversational filler injection (human rhythm)
             text = injectFillers(text);
