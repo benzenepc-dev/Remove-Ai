@@ -635,8 +635,97 @@
     </footer>
 
     <!-- ══════════════════════════════════════════════════════════
-     TOAST
+     WELCOME MODAL
 ══════════════════════════════════════════════════════════ -->
+    <div id="welcomeOverlay" class="fixed inset-0 z-[200] flex items-center justify-center p-4"
+        style="display:none!important">
+        <!-- Backdrop -->
+        <div class="absolute inset-0" style="background:rgba(3,7,18,0.85);backdrop-filter:blur(12px)"></div>
+
+        <!-- Particles -->
+        <div id="particles" class="absolute inset-0 overflow-hidden pointer-events-none"></div>
+
+        <!-- Card -->
+        <div id="welcomeCard" class="relative z-10 w-full max-w-md rounded-3xl p-8 shadow-2xl"
+            style="background:linear-gradient(135deg,rgba(30,20,80,0.95),rgba(17,24,39,0.98));border:1px solid rgba(108,63,255,0.3);box-shadow:0 0 60px rgba(108,63,255,0.2),0 25px 50px rgba(0,0,0,0.5);animation:welcomeIn 0.6s cubic-bezier(0.34,1.56,0.64,1) forwards">
+
+            <!-- Top glow -->
+            <div class="absolute -top-16 left-1/2 -translate-x-1/2 w-48 h-48 rounded-full pointer-events-none"
+                style="background:radial-gradient(circle,rgba(108,63,255,0.4),transparent 70%)"></div>
+
+            <!-- Icon -->
+            <div class="flex justify-center mb-5">
+                <div class="w-20 h-20 rounded-2xl flex items-center justify-center text-4xl shadow-lg"
+                    style="background:linear-gradient(135deg,#6c3fff,#a08fff);box-shadow:0 8px 32px rgba(108,63,255,0.5)">
+                    🎓
+                </div>
+            </div>
+
+            <!-- Title -->
+            <div class="text-center mb-2">
+                <h2 class="font-display font-bold text-2xl text-white">Bienvenue sur <span class="gradient-text">Remove
+                        AI</span></h2>
+                <p class="text-sm mt-1" style="color:#9ca3af">L'outil CPS pour passer les filtres IA 🚀</p>
+            </div>
+
+            <!-- Divider -->
+            <div class="my-5 h-px"
+                style="background:linear-gradient(90deg,transparent,rgba(108,63,255,0.5),transparent)"></div>
+
+            <!-- Form -->
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider mb-2" style="color:#a08fff">👤
+                        Ton prénom</label>
+                    <input id="inputNom" type="text" placeholder="Ex : Amadou"
+                        class="w-full rounded-xl px-4 py-3 text-sm font-medium outline-none transition-all"
+                        style="background:rgba(255,255,255,0.07);border:1px solid rgba(108,63,255,0.3);color:#f3f4f6;caret-color:#a08fff"
+                        onfocus="this.style.borderColor='rgba(108,63,255,0.8)';this.style.boxShadow='0 0 0 3px rgba(108,63,255,0.15)'"
+                        onblur="this.style.borderColor='rgba(108,63,255,0.3)';this.style.boxShadow='none'" />
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider mb-2" style="color:#a08fff">🏫 Ta
+                        promo</label>
+                    <select id="inputPromo"
+                        class="w-full rounded-xl px-4 py-3 text-sm font-medium outline-none transition-all cursor-pointer"
+                        style="background:rgba(255,255,255,0.07);border:1px solid rgba(108,63,255,0.3);color:#f3f4f6"
+                        onfocus="this.style.borderColor='rgba(108,63,255,0.8)'"
+                        onblur="this.style.borderColor='rgba(108,63,255,0.3)'">
+                        <option value="" style="background:#1a1040">-- Sélectionne ta promo --</option>
+                        <option value="CPS 2024" style="background:#1a1040">CPS 2024</option>
+                        <option value="CPS 2025" style="background:#1a1040">CPS 2025</option>
+                        <option value="CPS 2026" style="background:#1a1040">CPS 2026</option>
+                        <option value="CPS 2027" style="background:#1a1040">CPS 2027</option>
+                        <option value="Autre" style="background:#1a1040">Autre</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- CTA -->
+            <button onclick="saveStudent()"
+                class="mt-6 w-full py-3.5 rounded-xl font-display font-bold text-white text-sm tracking-wide transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
+                style="background:linear-gradient(135deg,#6c3fff,#a08fff);box-shadow:0 4px 20px rgba(108,63,255,0.4)">
+                ✨ Accéder à l'outil
+            </button>
+
+            <!-- Footer note -->
+            <p class="text-center text-xs mt-4" style="color:#4b5563">Tes données restent sur ton appareil uniquement
+            </p>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════
+     GREETING BANNER
+══════════════════════════════════════════════════════════ -->
+    <div id="greetingBanner"
+        class="hidden fixed top-0 left-0 right-0 z-[100] flex items-center justify-center py-2 text-sm font-medium"
+        style="background:linear-gradient(90deg,rgba(108,63,255,0.15),rgba(160,143,255,0.1),rgba(108,63,255,0.15));border-bottom:1px solid rgba(108,63,255,0.2);backdrop-filter:blur(8px)">
+        <span id="greetingText" style="color:#c4baff"></span>
+        <button onclick="document.getElementById('greetingBanner').classList.add('hidden')"
+            class="ml-3 text-xs opacity-40 hover:opacity-80 transition-opacity" style="color:#9ca3af">✕</button>
+    </div>
+
+
     <div id="toast"
         class="fixed bottom-6 right-6 z-50 flex items-center gap-2 bg-green-500 text-gray-950 font-semibold text-sm px-4 py-3 rounded-xl shadow-2xl shadow-green-900/50 translate-y-20 opacity-0 transition-all duration-300">
         ✅ Copié dans le presse-papier !
@@ -841,18 +930,151 @@
         }
 
         // ─────────────────────────────────────────────────────────────
-        //  CLEAN ENGINE
+        //  PASS C — AI VOCABULARY REPLACEMENT (increases perplexity)
+        // ─────────────────────────────────────────────────────────────
+        const vocabRules = [
+            { re: /\butilize[sd]?\b/gi, replace: 'use' },
+            { re: /\bleverag(e[sd]?|ing)\b/gi, replace: 'use' },
+            { re: /\bfacilitate[sd]?\b/gi, replace: 'help' },
+            { re: /\bdelv(e[sd]?|ing)\b/gi, replace: 'look' },
+            { re: /\bfoster(s|ed|ing)?\b/gi, replace: 'build' },
+            { re: /\benhance[sd]?\b/gi, replace: 'improve' },
+            { re: /\boptimize[sd]?\b/gi, replace: 'improve' },
+            { re: /\bmaximize[sd]?\b/gi, replace: 'increase' },
+            { re: /\bminimize[sd]?\b/gi, replace: 'reduce' },
+            { re: /\bprioritize[sd]?\b/gi, replace: 'focus on' },
+            { re: /\bstreamline[sd]?\b/gi, replace: 'simplify' },
+            { re: /\bemphasize[sd]?\b/gi, replace: 'stress' },
+            { re: /\bdemonstrate[sd]?\b/gi, replace: 'show' },
+            { re: /\bexhibit[sd]?\b/gi, replace: 'show' },
+            { re: /\bensure[sd]?\b/gi, replace: 'make sure' },
+            { re: /\bcomprehensive\b/gi, replace: 'complete' },
+            { re: /\brobust\b/gi, replace: 'strong' },
+            { re: /\bseamless(ly)?\b/gi, replace: 'smooth' },
+            { re: /\binnovative\b/gi, replace: 'new' },
+            { re: /\bcutting-edge\b/gi, replace: 'modern' },
+            { re: /\bstate-of-the-art\b/gi, replace: 'advanced' },
+            { re: /\bgroundbreaking\b/gi, replace: 'new' },
+            { re: /\bcrucial\b/gi, replace: 'key' },
+            { re: /\bvital\b/gi, replace: 'important' },
+            { re: /\bparamount\b/gi, replace: 'very important' },
+            { re: /\bpivotal\b/gi, replace: 'central' },
+            { re: /\bsubstantial(ly)?\b/gi, replace: 'large' },
+            { re: /\bexceptional(ly)?\b/gi, replace: 'great' },
+            { re: /\bextensive(ly)?\b/gi, replace: 'wide' },
+            { re: /\beffectively\b/gi, replace: 'well' },
+            { re: /\befficiently\b/gi, replace: 'well' },
+            { re: /\bsignificantly\b/gi, replace: 'greatly' },
+            { re: /\bparticularly\b/gi, replace: 'especially' },
+            { re: /\bnotably\b/gi, replace: 'especially' },
+            { re: /\bultimately\b/gi, replace: 'in the end' },
+            { re: /\bfundamentally\b/gi, replace: 'basically' },
+            { re: /\bessentially\b/gi, replace: 'basically' },
+            { re: /\bprimarily\b/gi, replace: 'mainly' },
+            { re: /\blandscape\b/gi, replace: 'field' },
+            { re: /\becosystem\b/gi, replace: 'environment' },
+            { re: /\bparadigm\b/gi, replace: 'model' },
+            { re: /\bsynerg(y|ies)\b/gi, replace: 'cooperation' },
+            { re: /\bmetrics\b/gi, replace: 'results' },
+            { re: /\boutcomes\b/gi, replace: 'results' },
+            { re: /\binsights\b/gi, replace: 'findings' },
+            // Français IA → naturels
+            { re: /\boptimiser\b/gi, replace: 'améliorer' },
+            { re: /\bfaciliter\b/gi, replace: 'aider' },
+            { re: /\bprivilégier\b/gi, replace: 'préférer' },
+            { re: /\bpréconise[r]?\b/gi, replace: 'recommande' },
+            { re: /\bcontribuer à\b/gi, replace: 'aider à' },
+            { re: /\bpermettre de\b/gi, replace: 'aider à' },
+            { re: /\bconstitue[r]?\b/gi, replace: 'est' },
+            { re: /\bnotamment\b/gi, replace: 'surtout' },
+            { re: /\bégalement\b/gi, replace: 'aussi' },
+            { re: /\bainsi que\b/gi, replace: 'et' },
+            { re: /\bafin de\b/gi, replace: 'pour' },
+            { re: /\bdans le cadre de\b/gi, replace: 'dans' },
+            { re: /\bau sein de\b/gi, replace: 'dans' },
+            { re: /\bà travers\b/gi, replace: 'via' },
+            { re: /\ben matière de\b/gi, replace: 'sur' },
+            { re: /\bs'inscrire dans\b/gi, replace: 'faire partie de' },
+        ];
+
+        // ─────────────────────────────────────────────────────────────
+        //  PASS D — PASSIVE → ACTIVE VOICE
+        // ─────────────────────────────────────────────────────────────
+        const passiveRules = [
+            { re: /\bcan be (used|seen|found|done|made)\b/gi, replace: 'works' },
+            { re: /\bis (used|seen|found|done|made) to\b/gi, replace: 'serves to' },
+            { re: /\bwas (designed|built|created|developed) to\b/gi, replace: 'aims to' },
+            { re: /\best (utilisé|conçu|développé|créé) pour\b/gi, replace: 'sert à' },
+            { re: /\bpeut être (utilisé|vu|fait|appliqué)\b/gi, replace: 'fonctionne' },
+            { re: /\bsont (utilisés|conçus|développés|créés) pour\b/gi, replace: 'servent à' },
+        ];
+
+        // ─────────────────────────────────────────────────────────────
+        //  PASS E — BURSTINESS VARIATION (sentence length)
+        // ─────────────────────────────────────────────────────────────
+        function varyBurstiness(text) {
+            const sentenceRe = /([^.!?]+[.!?]+)/g;
+            const sentences = [];
+            let m, lastIdx = 0;
+            while ((m = sentenceRe.exec(text)) !== null) {
+                sentences.push(m[1]);
+                lastIdx = sentenceRe.lastIndex;
+            }
+            if (lastIdx < text.length) sentences.push(text.slice(lastIdx));
+            if (sentences.length < 3) return text;
+
+            const result = [];
+            let i = 0;
+            while (i < sentences.length) {
+                const s = sentences[i].trim();
+                const words = s.split(/\s+/).filter(Boolean);
+
+                // Long sentence (>28 words) → split at conjunction after comma
+                if (words.length > 28) {
+                    const sp = s.search(/,\s+(et|mais|car|donc|or|ni|que|qui|où|parce que|puisque|bien que|and|but|because|so|which|that|since|although)\s/i);
+                    if (sp > 0) {
+                        const p1 = s.slice(0, sp).trim();
+                        const p2 = s.slice(sp + 1).trim();
+                        result.push(p1.match(/[.!?]$/) ? p1 : p1 + '.');
+                        result.push(p2.charAt(0).toUpperCase() + p2.slice(1));
+                        i++; continue;
+                    }
+                }
+
+                // Two consecutive very short sentences (<6 words) → merge
+                if (words.length < 6 && i + 1 < sentences.length) {
+                    const next = sentences[i + 1].trim();
+                    if (next.split(/\s+/).filter(Boolean).length < 6) {
+                        result.push(s.replace(/[.!?]+$/, '') + ', ' + next.charAt(0).toLowerCase() + next.slice(1));
+                        i += 2; continue;
+                    }
+                }
+
+                result.push(s);
+                i++;
+            }
+            return result.join(' ');
+        }
+
+        // ─────────────────────────────────────────────────────────────
+        //  CLEAN ENGINE  (6 passes)
         // ─────────────────────────────────────────────────────────────
         function cleanText(raw) {
             let text = raw;
             const issues = [];
             let mdCount = 0, aiCount = 0, charCount = 0;
 
+            // Pass A: Markdown removal
             for (const rule of markdownRules) {
                 const before = text;
                 text = text.replace(rule.re, rule.replace);
-                if (before.length !== text.length) { mdCount++; issues.push({ name: rule.name, type: 'md', count: before.length - text.length }); }
+                if (before.length !== text.length) {
+                    mdCount++;
+                    issues.push({ name: rule.name, type: 'md', count: before.length - text.length });
+                }
             }
+
+            // Pass B: AI phrase removal
             for (const rule of aiPhraseRules) {
                 const matches = text.match(rule.re);
                 if (matches?.length) {
@@ -861,15 +1083,40 @@
                     text = text.replace(rule.re, rule.replace);
                 }
             }
+
+            // Pass C: AI vocabulary → natural words (perplexity ↑)
+            for (const rule of vocabRules) {
+                const before = text;
+                text = text.replace(rule.re, rule.replace);
+                if (before !== text) {
+                    aiCount++;
+                    issues.push({ name: '🔤 Vocab IA → naturel', type: 'ai', count: 1 });
+                }
+            }
+
+            // Pass D: Passive → active voice
+            for (const rule of passiveRules) {
+                const before = text;
+                text = text.replace(rule.re, rule.replace);
+                if (before !== text) issues.push({ name: '🔄 Voix passive → active', type: 'ai', count: 1 });
+            }
+
+            // Pass E: Burstiness variation
+            text = varyBurstiness(text);
+
+            // Pass F: Character cleanup
             for (const rule of charRules) {
                 const before = text;
                 text = text.replace(rule.re, rule.replace);
-                if (before.length !== text.length) { charCount++; issues.push({ name: rule.name, type: 'char', count: before.length - text.length }); }
+                if (before.length !== text.length) {
+                    charCount++;
+                    issues.push({ name: rule.name, type: 'char', count: before.length - text.length });
+                }
             }
 
-            // Fix capitalization after removal
+            // Fix capitalization after removals
             text = text.replace(/([.!?]\s+)([a-zàâéèêëîïôùûüç])/g, (m, p1, p2) => p1 + p2.toUpperCase());
-            text = text.trim();
+            text = text.replace(/  +/g, ' ').trim();
 
             return { cleaned: text, issues, mdCount, aiCount, charCount };
         }
@@ -1014,7 +1261,150 @@
         document.addEventListener('keydown', e => {
             if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') copyOutput();
         });
+
+        // ─────────────────────────────────────────────────────────────
+        //  WELCOME MODAL & STUDENT PROFILE
+        // ─────────────────────────────────────────────────────────────
+        (function initStudent() {
+            const nom = localStorage.getItem('cps_nom');
+            const promo = localStorage.getItem('cps_promo');
+
+            if (!nom) {
+                // First visit — show modal
+                showWelcomeModal();
+            } else {
+                // Returning student — show greeting banner
+                showGreeting(nom, promo);
+            }
+        })();
+
+        function showWelcomeModal() {
+            const overlay = document.getElementById('welcomeOverlay');
+            overlay.style.display = 'flex';
+            spawnParticles();
+            // Focus first input after animation
+            setTimeout(() => document.getElementById('inputNom').focus(), 700);
+        }
+
+        function saveStudent() {
+            const nom = document.getElementById('inputNom').value.trim();
+            const promo = document.getElementById('inputPromo').value;
+            if (!nom) {
+                document.getElementById('inputNom').style.borderColor = 'rgba(239,68,68,0.8)';
+                document.getElementById('inputNom').style.boxShadow = '0 0 0 3px rgba(239,68,68,0.15)';
+                document.getElementById('inputNom').placeholder = '⚠️ Entre ton prénom !';
+                return;
+            }
+            const nomFormatted = nom.charAt(0).toUpperCase() + nom.slice(1).toLowerCase();
+            localStorage.setItem('cps_nom', nomFormatted);
+            localStorage.setItem('cps_promo', promo || 'CPS');
+            // Animate out
+            const card = document.getElementById('welcomeCard');
+            card.style.animation = 'welcomeOut 0.4s cubic-bezier(0.4,0,1,1) forwards';
+            setTimeout(() => {
+                document.getElementById('welcomeOverlay').style.display = 'none';
+                showGreeting(nomFormatted, promo || 'CPS');
+            }, 400);
+        }
+
+        function showGreeting(nom, promo) {
+            const hour = new Date().getHours();
+            let salut;
+            if (hour >= 5 && hour < 12) salut = 'Bonjour';
+            else if (hour >= 12 && hour < 18) salut = 'Bon après-midi';
+            else salut = 'Bonsoir';
+
+            const banner = document.getElementById('greetingBanner');
+            const text = document.getElementById('greetingText');
+            text.innerHTML = `👋 ${salut} <strong style="color:#a08fff">${nom}</strong>${promo ? ` · <span style="color:#f5a623;font-size:0.75rem">${promo}</span>` : ''} — Bonne session de nettoyage ! 🚀`;
+            banner.classList.remove('hidden');
+            // Push content down slightly
+            document.body.style.paddingTop = banner.offsetHeight + 'px';
+            setTimeout(() => document.body.style.paddingTop = '', 4000);
+        }
+
+        function spawnParticles() {
+            const container = document.getElementById('particles');
+            for (let i = 0; i < 30; i++) {
+                const p = document.createElement('div');
+                const size = Math.random() * 6 + 2;
+                const x = Math.random() * 100;
+                const dur = Math.random() * 8 + 4;
+                const del = Math.random() * 4;
+                p.style.cssText = `
+                    position:absolute;
+                    width:${size}px;height:${size}px;
+                    left:${x}%;bottom:-10px;
+                    border-radius:50%;
+                    background:rgba(${Math.random() > 0.5 ? '108,63,255' : '160,143,255'},${Math.random() * 0.6 + 0.2});
+                    animation:floatUp ${dur}s ${del}s ease-in infinite;
+                    pointer-events:none;
+                `;
+                container.appendChild(p);
+            }
+        }
+
+        // Enter key submits the modal form
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Enter' && document.getElementById('welcomeOverlay').style.display !== 'none') {
+                saveStudent();
+            }
+        });
     </script>
+
+    <style>
+        @keyframes welcomeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.85) translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        @keyframes welcomeOut {
+            from {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+
+            to {
+                opacity: 0;
+                transform: scale(0.9) translateY(-20px);
+            }
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) scale(1);
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 1;
+            }
+
+            90% {
+                opacity: 0.5;
+            }
+
+            100% {
+                transform: translateY(-100vh) scale(0.5);
+                opacity: 0;
+            }
+        }
+
+        #inputNom::placeholder {
+            color: rgba(156, 163, 175, 0.5);
+        }
+
+        #inputPromo option {
+            color: #f3f4f6;
+        }
+    </style>
 </body>
 
 </html>
