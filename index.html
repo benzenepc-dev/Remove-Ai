@@ -631,7 +631,7 @@
             </div>
         </div>
         <div class="text-center py-2 text-xs" style="border-top:1px solid var(--border);color:var(--text-dimmer)">
-            remove-ai by <span class="font-semibold gradient-text">Ziw Baby</span>
+            remove-ai by <span class="font-semibold gradient-text">AAMD</span>
         </div>
     </footer>
 
@@ -1395,7 +1395,7 @@
         // ─────────────────────────────────────────────────────────────
         const SUPA_URL = 'https://chztdwfltjxsmdmafans.supabase.co';
         const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNoenRkd2ZsdGp4c21kbWFmYW5zIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE0MjcyNTAsImV4cCI6MjA4NzAwMzI1MH0.uHCgJKxi_SQh7rR7gPGse4yEyBWGOz13VwyjwrgTHSA';
-        const supabase = window.supabase.createClient(SUPA_URL, SUPA_KEY);
+        const db = window.supabase.createClient(SUPA_URL, SUPA_KEY);
 
         // ─────────────────────────────────────────────────────────────
         //  WELCOME MODAL & STUDENT PROFILE
@@ -1456,7 +1456,7 @@
             localStorage.setItem('cps_promo', promo);
 
             // Save to Supabase (fire-and-forget, don't block UI)
-            supabase.from('students').insert({
+            db.from('students').insert({
                 prenom, nom, promo,
                 created_at: new Date().toISOString(),
                 last_seen_at: new Date().toISOString()
